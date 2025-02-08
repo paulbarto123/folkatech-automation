@@ -4,20 +4,23 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from config.configtest import setup
 import time
+
+from base.base_driver import BaseDriver
 from utilities.utils import Utils
 from pages.login_page import LoginPage
 
 
 @pytest.mark.usefixtures("setup")
-class TestFolkatech:
-    USERNAME = "admin@example.com"
-    PASSWORD = "password"
-    INVALID_PASSWORD = "wrongpassword"
+class TestFolkatech():
+
 
     @pytest.fixture(autouse=True)
     def class_setup(self):
         self.login_page = LoginPage(self.driver)
+        self.USERNAME = "rhmtsaepuloh@gmail.com"  # Replace with a valid username
+        self.PASSWORD = "password"  # Replace with a valid password
 
     # Positive Test Case - Valid Login
     def test_valid_login(self):
@@ -26,10 +29,9 @@ class TestFolkatech:
         # Find elements and perform login
         self.login_page.enterEmail(self.USERNAME)
         self.login_page.enterPassword(self.PASSWORD)
-        self.login_page.clickLogin()
+        self.login_page.captchaManual()
         self.login_page.clickLogin()
         time.sleep(3)
-
         # Validate successful login
         try:
             assert "dashboard" in self.driver.current_url.lower(), "Login failed!"
